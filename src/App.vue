@@ -14,10 +14,14 @@
       />
     </header>
     <section class="main" v-show="todos.length">
-      <ul>
-        <li class="todo-list" v-for="todo in todos" :key="todo.id">
-          <input type="checkbox" class="toggle" :checked = "todo.completed" />
-          {{ todo.title }} | {{ todo.completed }}
+      <ul class="todo-list">
+        <li class="todo-list" v-for="todo in todos" :key="todo.id" :class="{editing: todo == editedTodo}">
+          <div class="view">
+              <input type="checkbox" class="toggle"  />
+              <label @dblclick="editTodo(todo)">{{ todo.title }}</label>
+              <button class="destroy" @click="removeTodo(todo)"></button>
+          </div>
+          <input type="text" class="edit">
         </li>
       </ul>
     </section>
@@ -30,12 +34,12 @@ export default {
     // our data
     todos: [],
     newTodo: "",
+    editedTodo: null
   }),
   methods: {
     // our methods
     addTodo() {
       const value = this.newTodo && this.newTodo.trim();
-
       const todoItem = {
         id: this.todos.length + 1,
         title: value,
@@ -46,7 +50,15 @@ export default {
       }
       this.todos.push(todoItem);
       this.newTodo = "";
+
     },
+    removeTodo(todo){
+    const index = this.todos.indexOf(todo);
+    this.todos.splice(index,1);
+
+    },
+    editTodo(todo){ 
+    }
   },
 };
 </script>
